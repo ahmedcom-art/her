@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Will You Be My LDR?</title>
+  <title>LDR Steps</title>
   <style>
     body {
       margin: 0;
@@ -22,10 +22,10 @@
       box-shadow: 0 10px 25px rgba(0,0,0,0.15);
       text-align: center;
       max-width: 400px;
-      animation: fadeIn 1.2s ease;
+      animation: fadeIn 0.8s ease;
     }
     h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       margin-bottom: 1rem;
       color: #333;
     }
@@ -40,21 +40,11 @@
       border-radius: 12px;
       font-size: 1rem;
       cursor: pointer;
+      background: #8ec5fc;
       transition: 0.3s;
     }
-    #yesBtn {
-      background: #8ec5fc;
-      margin-right: 10px;
-    }
-    #yesBtn:hover {
+    button:hover {
       background: #6db0f9;
-    }
-    #noBtn {
-      background: #ff9ecb;
-      position: relative;
-    }
-    #noBtn:hover {
-      background: #ff7fb6;
     }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(20px); }
@@ -63,60 +53,79 @@
   </style>
 </head>
 <body>
-  <div class="card">
-    <h1>So uh… I’ve been thinking 👀</h1>
-    <p>We talk a lot, and I kinda like the way we vibe…<br>So I gotta ask you something important.</p>
-    <h1>Will you be my LDR? ❤️</h1>
-    <div>
-      <button id="yesBtn">Yes 💕</button>
-      <button id="noBtn">No 😢</button>
-    </div>
+  <div class="card" id="card">
+    <h1 id="title">Hey.. 👋</h1>
+    <p id="text">I wanna tell you something but in steps 😄</p>
+    <button id="nextBtn">Next</button>
   </div>
 
   <script>
-    const noBtn = document.getElementById('noBtn');
+    const steps = [
+      {
+        title: "Step 1 👀",
+        text: "I've actually been enjoying talking to you a lot, Angel…"
+      },
+      {
+        title: "Step 2 😌",
+        text: "Like… more than just normal talking ngl, Angel."
+      },
+      {
+        title: "Step 3 ✨",
+        text: "And ngl… I kinda look forward to your messages every day, Angel 😭"
+      },
+      {
+        title: "Step 4 ❤️",
+        text: "Sooo I wanted to ask something important, Angel…"
+      },
+      {
+        title: "Okay here it is…",
+        text: "Will you be my LDR? ❤️",
+        final: true
+      }
+    ];
 
-    noBtn.addEventListener('mouseover', () => {
-      const x = Math.random() * (window.innerWidth - 100);
-      const y = Math.random() * (window.innerHeight - 50);
-      noBtn.style.position = 'absolute';
-      noBtn.style.left = x + 'px';
-      noBtn.style.top = y + 'px';
-    });
+    let index = 0;
 
-    // cute "ask again" when she clicks no
-    noBtn.addEventListener('click', () => {
-      document.body.innerHTML = `
-        <div class="card">
-          <h1>Wait… no? 😭</h1>
-          <p>Okay but… look at this face 👉🥺👈<br>
-          Are you suuure you don't wanna be my LDR?</p>
-          <button id="yesAnyway">Okay fine 😅💕</button>
-        </div>
-      `;
+    document.getElementById("nextBtn").addEventListener("click", () => {
+      index++;
 
-      document.getElementById('yesAnyway').addEventListener('click', () => {
-        document.body.innerHTML = `
-          <div class="card">
-            <h1>Yesss! 🎉💖</h1>
-            <p>You just made my whole day. Now we're officially LDR 😌✨</p>
-          </div>
-        `;
-      });
-    });
-      const y = Math.random() * (window.innerHeight - 50);
-      noBtn.style.position = 'absolute';
-      noBtn.style.left = x + 'px';
-      noBtn.style.top = y + 'px';
-    });
+      const card = document.getElementById("card");
+      const title = document.getElementById("title");
+      const text = document.getElementById("text");
+      const btn = document.getElementById("nextBtn");
 
-    document.getElementById('yesBtn').addEventListener('click', () => {
-      document.body.innerHTML = `
-        <div class="card">
-          <h1>Yesss! 🎉💖</h1>
-          <p>You just made my whole day. Now we're officially LDR 😌✨</p>
-        </div>
-      `;
+      const step = steps[index];
+
+      if (!step) return;
+
+      title.textContent = step.title;
+      text.textContent = step.text;
+
+      if (step.final) {
+        btn.style.display = "none";
+        const yes = document.createElement("button");
+        yes.textContent = "Yes 💕";
+        yes.style.marginRight = "10px";
+        const no = document.createElement("button");
+        no.textContent = "No 😢";
+
+        card.appendChild(yes);
+        card.appendChild(no);
+
+        yes.addEventListener("click", () => {
+          card.innerHTML = `<h1>Yesss! 🎉</h1><p>You just made my whole day 😭❤️</p>`;
+        });
+
+        no.addEventListener("click", () => {
+          card.innerHTML = `<h1>Wait… no?? 😭</h1>
+            <p>Okay but… look 🥺 can we try again?</p>
+            <button id='retry'>Okay fine 😅💕</button>`;
+
+          document.getElementById('retry').addEventListener('click', () => {
+            card.innerHTML = `<h1>Yesss! 🎉</h1><p>We're official LDR now 😌✨</p>`;
+          });
+        });
+      }
     });
   </script>
 </body>
